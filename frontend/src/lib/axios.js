@@ -10,6 +10,7 @@ import axios from "axios";
 // Step 6(d)-1
 // Create Axios Instance
 // ===============================================
+
 export const axiosInstance = axios.create({
   // ===============================================
   // Dynamic Base URL
@@ -18,19 +19,19 @@ export const axiosInstance = axios.create({
   // http://localhost:3000/api
   //
   // Production:
-  // /api
+  // Render backend URL + /api
   // ===============================================
+
   baseURL:
     import.meta.env.MODE === "development"
       ? "http://localhost:3000/api"
-      : "/api",
+      : "https://chatflow-tbuu.onrender.com/api",
 
   // ===============================================
   // withCredentials: true
   //
   // Sends cookies automatically
-  //
-  // Required for JWT authentication
   // ===============================================
+
   withCredentials: true,
 });
