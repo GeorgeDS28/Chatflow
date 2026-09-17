@@ -1,29 +1,30 @@
 /* index.js*/
 
 import express from "express";
-import authRoutes from "./routes/auth.route.js";
-
-import dotenv from "dotenv";
+import http from "http";
 import cookieParser from "cookie-parser";
-
 import cors from "cors";
-import { connectDB } from "./lib/db.js";
 
+import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 
-dotenv.config();
+import { connectDB } from "./lib/db.js";
+import { ENV } from "./lib/env.js";
+import { initializeSocket } from "./lib/socket.js";
+
 const app = express();
 
-const PORT = process.env.PORT;
+const server = http.createServer(app);
+
+const PORT = ENV.PORT || 3000;
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
-
 app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ENV.CLIENT_URL,
     credentials: true,
   }),
 );
@@ -31,8 +32,10 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
+initializeSocket(server);
+
 connectDB();
 
-app.listen(PORT, () => {
-  console.log("Server is running on port 3000");
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
