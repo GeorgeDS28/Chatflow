@@ -1,6 +1,7 @@
 //socket.js
 import { Server } from "socket.io";
 import { ENV } from "./env.js";
+import { isAllowedOrigin } from "./cors.js";
 
 let io;
 
@@ -9,7 +10,7 @@ const userSocketMap = {};
 export const initializeSocket = (server) => {
   io = new Server(server, {
     cors: {
-      origin: ENV.CLIENT_URL,
+      origin: isAllowedOrigin,
       credentials: true,
     },
   });

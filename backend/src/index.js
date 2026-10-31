@@ -11,6 +11,7 @@ import messageRoutes from "./routes/message.route.js";
 import { connectDB } from "./lib/db.js";
 import { ENV } from "./lib/env.js";
 import { initializeSocket } from "./lib/socket.js";
+import { isAllowedOrigin } from "./lib/cors.js";
 
 const app = express();
 
@@ -24,7 +25,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ENV.CLIENT_URL,
+    origin: isAllowedOrigin,
     credentials: true,
   }),
 );
