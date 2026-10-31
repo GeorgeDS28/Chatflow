@@ -6,7 +6,7 @@ import {
   sendWelcomeEmail,
   sendPasswordResetEmail,
 } from "../emails/emailHandlers.js";
-import { generateToken } from "../lib/utils.js";
+import { clearToken, generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import { ENV } from "../lib/env.js";
@@ -167,7 +167,7 @@ export const login = async (req, res) => {
 // Step 3(d)-1
 // Purpose: Logout user by clearing cookie
 export const logout = (_, res) => {
-  res.cookie("jwt", "", { maxAge: 0 });
+  clearToken(res);
   res.status(200).json({ message: "Logged out successfully" });
 };
 
@@ -394,7 +394,7 @@ export const deleteAccount = async (req, res) => {
     await User.findByIdAndDelete(userId);
 
     // Clear authentication cookie
-    res.cookie("jwt", "", { maxAge: 0 });
+    clearToken(res);
 
     return res.status(200).json({
       message: "Account deleted successfully",
